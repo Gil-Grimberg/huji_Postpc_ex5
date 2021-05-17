@@ -66,8 +66,33 @@ public class TodoItemsHolderImplTest extends TestCase {
     holderUnderTest.addNewInProgressItem("do_ex5");
     assertEquals(1,holderUnderTest.getCurrentItems().get(0).myTimeStamp);
     holderUnderTest.addNewInProgressItem("do_ex2");
-    assertEquals(1,holderUnderTest.getCurrentItems().get(1).myTimeStamp);
-    assertEquals(2,holderUnderTest.getCurrentItems().get(0).myTimeStamp);
+    assertEquals(1,holderUnderTest.getCurrentItems().get(0).myTimeStamp);
+    assertEquals(2,holderUnderTest.getCurrentItems().get(1).myTimeStamp);
+  }
+  public void testwhen_addingNewTasks_then_orderIsCorrect(){
+    // setup
+    TodoItemsHolderImpl holderUnderTest = new TodoItemsHolderImpl();
+    holderUnderTest.addNewInProgressItem("do_ex5");
+    holderUnderTest.addNewInProgressItem("do_ex2");
+    holderUnderTest.addNewInProgressItem("do_ex2");
+    assertEquals(3,holderUnderTest.getCurrentItems().get(0).myTimeStamp);
+    assertEquals(2,holderUnderTest.getCurrentItems().get(1).myTimeStamp);
+    assertEquals(1,holderUnderTest.getCurrentItems().get(2).myTimeStamp);
+  }
+
+  public void testwhen_changingStatus_then_orderIsCorrect(){
+    // setup
+    TodoItemsHolderImpl holderUnderTest = new TodoItemsHolderImpl();
+    holderUnderTest.addNewInProgressItem("do_ex1");
+    holderUnderTest.addNewInProgressItem("do_ex2");
+    holderUnderTest.addNewInProgressItem("do_ex3");
+    assertEquals("do_ex3",holderUnderTest.getCurrentItems().get(0).description);
+    assertEquals("do_ex2",holderUnderTest.getCurrentItems().get(1).description);
+    assertEquals("do_ex1",holderUnderTest.getCurrentItems().get(2).description);
+    holderUnderTest.markItemDone(holderUnderTest.itemsList.get(0));
+    assertEquals("do_ex2",holderUnderTest.getCurrentItems().get(0).description);
+    assertEquals("do_ex1",holderUnderTest.getCurrentItems().get(1).description);
+    assertEquals("do_ex3",holderUnderTest.getCurrentItems().get(2).description);
   }
 //  5.
 //  6.

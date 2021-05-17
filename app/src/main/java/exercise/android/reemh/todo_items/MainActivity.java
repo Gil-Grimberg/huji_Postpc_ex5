@@ -30,9 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: implement the specs as defined below
         //    (find all UI components, hook them up, connect everything you need)
-        holder.addNewInProgressItem("task 1");
-        holder.addNewInProgressItem("task 2");
-//        holder.addNewInProgressItem("task 3");
+
         ToDoItemAdapter adapter = new ToDoItemAdapter((TodoItemsHolderImpl)holder);
         adapter.setToDoItems(holder.getCurrentItems());
         RecyclerView recyclerTodoItemsList = findViewById(R.id.recyclerTodoItemsList);

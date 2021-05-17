@@ -16,7 +16,6 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     final int DONE = 1;
     final int INPROGRESS = 2;
     ArrayList<TodoItem> itemsList = new ArrayList<>();
-//    ToDoItemsCompartor compartor = new ToDoItemsCompartor();
 
     @Override
     public List<TodoItem> getCurrentItems() {
@@ -28,28 +27,28 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     @Override
     public void addNewInProgressItem(String description) {
         itemsList.add(new TodoItem(INPROGRESS, description));
-//        itemsList.sort(compartor);
+        Collections.sort(itemsList, new ToDoItemsCompartor());
     }
 
 
     @Override
     public void markItemDone(TodoItem item) {
         item.setStatus(DONE);
-//        itemsList.sort(compartor);
+        Collections.sort(itemsList, new ToDoItemsCompartor());
     }
 
 
     @Override
     public void markItemInProgress(TodoItem item) {
         item.setStatus(INPROGRESS);
-//        itemsList.sort(compartor);
+        Collections.sort(itemsList, new ToDoItemsCompartor());
     }
 
 
     @Override
     public void deleteItem(TodoItem item) {
         itemsList.remove(item);
-//        itemsList.sort(compartor);
+        Collections.sort(itemsList, new ToDoItemsCompartor());
 
     }
 
@@ -60,7 +59,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     @Override
     public void addAll(List<TodoItem> items){
         itemsList.addAll(items);
-//        itemsList.sort(compartor);
+        Collections.sort(itemsList, new ToDoItemsCompartor());
     }
     @Override
     public int size(){ return itemsList.size();}

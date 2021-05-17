@@ -20,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 class ToDoViewHolder extends RecyclerView.ViewHolder {
@@ -49,6 +50,7 @@ class ToDoItemAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
         if (!_todoItemArrayList.getCurrentItems().isEmpty())
             _todoItemArrayList.clear();
         _todoItemArrayList.addAll(items);
+        Collections.sort(_todoItemArrayList.itemsList, new ToDoItemsCompartor());
         notifyDataSetChanged();
     }
 
@@ -70,23 +72,27 @@ class ToDoItemAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
         TodoItem item = _todoItemArrayList.getCurrentItems().get(position);
         holder.textView.setText(item.description);
         holder.checkBox.setChecked(item.isDone());  // mark task as checked if the status of the item is DONE
-        notifyDataSetChanged();
-
+        if (item.isDone())
+            holder.textView.setPaintFlags(holder.textView.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+        else
+            holder.textView.setPaintFlags(holder.textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
         holder.checkBox.setOnClickListener(v->{
             if (holder.checkBox.isChecked()) {
-                holder.textView.setPaintFlags(holder.textView.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
-                _todoItemArrayList.markItemDone(item); // make sure the real list is updated!
+//                holder.textView.setPaintFlags(holder.textView.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+                _todoItemArrayList.markItemDone(_todoItemArrayList.itemsList.get(position)); // make sure the real list is updated!
+                Collections.sort(_todoItemArrayList.itemsList, new ToDoItemsCompartor());
 
             }
             else {
-                holder.textView.setPaintFlags(holder.textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-                _todoItemArrayList.markItemInProgress(item);
-
+//                holder.textView.setPaintFlags(holder.textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                _todoItemArrayList.markItemInProgress(_todoItemArrayList.itemsList.get(position));
+                Collections.sort(_todoItemArrayList.itemsList, new ToDoItemsCompartor());
             }
             notifyDataSetChanged();
         });
         holder.deleteButton.setOnClickListener(v->{
             _todoItemArrayList.deleteItem(item);
+            Collections.sort(_todoItemArrayList.itemsList, new ToDoItemsCompartor());
             notifyDataSetChanged();
         });
     }
