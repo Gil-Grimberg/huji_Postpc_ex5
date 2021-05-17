@@ -19,7 +19,7 @@ public class TodoItemsHolderImplTest extends TestCase {
   }
 
   // TODO: add at least 10 more tests to verify correct behavior of your implementation of `TodoItemsHolderImpl` class
-//  1. delete item
+//  delete item
   public void testwhen_DeletingItem_then_callingListShouldntHaveThisItem(){
     // setup
     TodoItemsHolderImpl holderUnderTest = new TodoItemsHolderImpl();
@@ -29,7 +29,7 @@ public class TodoItemsHolderImplTest extends TestCase {
     holderUnderTest.deleteItem(holderUnderTest.getCurrentItems().get(0));
     assertEquals(0,holderUnderTest.getCurrentItems().size());
   }
-//  2. add item and change status
+//  add item and change status
   public void testwhen_addItem_and_changeStatus_then_thisItemShouldHaveThisStatus(){
     // setup
     TodoItemsHolderImpl holderUnderTest = new TodoItemsHolderImpl();
@@ -39,7 +39,7 @@ public class TodoItemsHolderImplTest extends TestCase {
     holderUnderTest.markItemDone(holderUnderTest.getCurrentItems().get(0));
     assertEquals(1,holderUnderTest.getCurrentItems().get(0).status);
 }
-//  3. add few items
+//  add few items
   public void testwhen_addingSeveralItems_then_toDoItemsListShouldHaveTheseItems(){
     // setup
     TodoItemsHolderImpl holderUnderTest = new TodoItemsHolderImpl();
@@ -48,7 +48,7 @@ public class TodoItemsHolderImplTest extends TestCase {
     holderUnderTest.addNewInProgressItem("do_ex5");
     assertEquals(3,holderUnderTest.getCurrentItems().size());
 }
-//  4. mark done and than inprogress
+//   mark done and than inprogress
   public void testwhen_markingItemAsDoneandThanInProgress_then_StatusChanges(){
     // setup
     TodoItemsHolderImpl holderUnderTest = new TodoItemsHolderImpl();
@@ -94,10 +94,5 @@ public class TodoItemsHolderImplTest extends TestCase {
     assertEquals("do_ex1",holderUnderTest.getCurrentItems().get(1).description);
     assertEquals("do_ex3",holderUnderTest.getCurrentItems().get(2).description);
   }
-//  5.
-//  6.
-//  7.
-//  8.
-//  9.
-//  10.
+
 }

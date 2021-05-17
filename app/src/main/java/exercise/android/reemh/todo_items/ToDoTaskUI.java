@@ -2,6 +2,7 @@ package exercise.android.reemh.todo_items;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,13 +29,13 @@ class ToDoViewHolder extends RecyclerView.ViewHolder {
     EditText textView;
     CheckBox checkBox;
     FloatingActionButton deleteButton;
-
+    ConstraintLayout constraintLayout;
     public ToDoViewHolder(View view) {
         super(view);
         textView = view.findViewById(R.id.textOfTask);
         checkBox = view.findViewById(R.id.checkbox);
         deleteButton = view.findViewById(R.id.deleteButton);
-
+        constraintLayout = view.findViewById(R.id.constraintLayout);
     }
 }
 
@@ -68,7 +70,8 @@ class ToDoItemAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
 
 
     public void onBindViewHolder(ToDoViewHolder holder, int position) {
-
+//        if (position%2==0)
+//            holder.constraintLayout.setBackgroundColor(1);
         TodoItem item = _todoItemArrayList.getCurrentItems().get(position);
         holder.textView.setText(item.description);
         holder.checkBox.setChecked(item.isDone());  // mark task as checked if the status of the item is DONE
