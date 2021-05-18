@@ -1,6 +1,7 @@
 package exercise.android.reemh.todo_items;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -70,8 +71,10 @@ class ToDoItemAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
 
 
     public void onBindViewHolder(ToDoViewHolder holder, int position) {
-//        if (position%2==0)
-//            holder.constraintLayout.setBackgroundColor(1);
+        if (position%2==0)
+            holder.constraintLayout.setBackgroundColor(Color.parseColor("#CCCCCC"));
+        else
+            holder.constraintLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         TodoItem item = _todoItemArrayList.getCurrentItems().get(position);
         holder.textView.setText(item.description);
         holder.checkBox.setChecked(item.isDone());  // mark task as checked if the status of the item is DONE

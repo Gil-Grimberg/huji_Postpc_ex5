@@ -9,9 +9,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +32,19 @@ public class MainActivity extends AppCompatActivity {
         if (holder == null) {
             holder = new TodoItemsHolderImpl();
         }
-
+        if (savedInstanceState!=null)
+        {
+            EditText taskText = findViewById(R.id.editTextInsertTask);
+            taskText.setText(savedInstanceState.getString("taskText"));
+            holder.clear();
+            List<TodoItem> savedItemsList = holder.getCurrentItems();
+            int size = savedInstanceState.getInt("size");
+            for (int i=0;i<size;i++)
+            {
+                savedItemsList.add((TodoItem) savedInstanceState.getSerializable("task_"+String.valueOf(i)));
+            }
+            holder.addAll(savedItemsList);
+        }
         // TODO: implement the specs as defined below
         //    (find all UI components, hook them up, connect everything you need)
 
@@ -49,6 +66,21 @@ public class MainActivity extends AppCompatActivity {
                 taskText.setText("");
             }
         });
+
+    }
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        EditText taskText = findViewById(R.id.editTextInsertTask);
+        outState.putString("taskText",taskText.getText().toString());
+        List<TodoItem> savedItemsList;
+        savedItemsList = holder.getCurrentItems();
+        int size = holder.size();
+        outState.putInt("size",size);
+        for (int i=0;i<size;i++)
+        {
+            outState.putSerializable("task_"+String.valueOf(i),savedItemsList.get(i));
+        }
 
     }
 
