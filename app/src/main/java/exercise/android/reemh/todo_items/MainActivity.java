@@ -30,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (holder == null) {
-            holder = new TodoItemsHolderImpl();
+//            holder = new TodoItemsHolderImpl();
+            holder = ToDoItemsApp.getInstance().getDataBase(); // replace the last row with this??
         }
         if (savedInstanceState!=null)
         {
@@ -45,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
             }
             holder.addAll(savedItemsList);
         }
-        // TODO: implement the specs as defined below
-        //    (find all UI components, hook them up, connect everything you need)
 
         ToDoItemAdapter adapter = new ToDoItemAdapter((TodoItemsHolderImpl)holder);
         adapter.setToDoItems(holder.getCurrentItems());

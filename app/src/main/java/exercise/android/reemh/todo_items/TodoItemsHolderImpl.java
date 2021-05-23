@@ -1,5 +1,7 @@
 package exercise.android.reemh.todo_items;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -16,6 +18,14 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     final int DONE = 1;
     final int INPROGRESS = 2;
     ArrayList<TodoItem> itemsList = new ArrayList<>();
+    private final Context context;
+    private final SharedPreferences sp;
+
+    public TodoItemsHolderImpl(Context context){
+        this.context = context;
+        sp = context.getSharedPreferences("local_ToDoItemsHolder_db",Context.MODE_PRIVATE);
+
+    }
 
     @Override
     public List<TodoItem> getCurrentItems() {
