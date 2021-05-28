@@ -9,6 +9,9 @@ public interface TodoItemsHolder {
   /** Get a copy of the current items list */
   List<TodoItem> getCurrentItems();
 
+  /**adds a given item to the list */
+  void addItem(TodoItem item);
+
   /**
    * Creates a new TodoItem and adds it to the list, with the @param description and status=IN-PROGRESS
    * Subsequent calls to [getCurrentItems()] should have this new TodoItem in the list

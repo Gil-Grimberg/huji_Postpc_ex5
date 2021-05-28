@@ -40,11 +40,11 @@
         android:layout_marginTop="60dp"
         />
 
-    <ToggleButton
-        android:id="@+id/toggleButton"
+    <CheckBox
+        android:id="@+id/checkBoxEditor"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="ToggleButton"
+        android:text="checkBox"
         app:layout_constraintLeft_toRightOf="@+id/Status"
         app:layout_constraintTop_toTopOf="@+id/Status"
         android:layout_marginStart="20dp"

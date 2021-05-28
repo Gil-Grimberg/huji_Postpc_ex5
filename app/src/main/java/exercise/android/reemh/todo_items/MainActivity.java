@@ -56,13 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 finalTaskText.setText("");
             }
         });
-        finalTaskText.setOnClickListener(v-> {
-            Intent resultsIntent = new Intent(MainActivity.this, ResultsActivity.class);
-            resultsIntent.putExtra("original_number", original_number);
-            resultsIntent.putExtra("root1", root1);
-            resultsIntent.putExtra("root2", root2);
-            startActivity(resultsIntent);
-        });
 
 
         holder.toDoItemsLiveDataPublic.observe(this, new Observer<ArrayList<TodoItem>>() {

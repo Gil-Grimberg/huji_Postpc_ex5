@@ -26,7 +26,7 @@
         app:layout_constraintLeft_toRightOf="@+id/deleteButton"
         app:layout_constraintRight_toLeftOf="@id/textOfTask"
         />
-    <EditText
+    <TextView
         android:id="@+id/textOfTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

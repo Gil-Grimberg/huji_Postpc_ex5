@@ -1,6 +1,7 @@
 package exercise.android.reemh.todo_items;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -27,7 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 class ToDoViewHolder extends RecyclerView.ViewHolder {
-    EditText textView;
+    TextView textView;
     CheckBox checkBox;
     FloatingActionButton deleteButton;
     ConstraintLayout constraintLayout;
@@ -78,7 +80,7 @@ class ToDoItemAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
         else
             holder.constraintLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         TodoItem item = _todoItemArrayList.getCurrentItems().get(position);
-        holder.textView.setText(item.description);
+        holder.textView.setText(item.getDescription());
         holder.checkBox.setChecked(item.isDone());  // mark task as checked if the status of the item is DONE
         if (item.isDone())
             holder.textView.setPaintFlags(holder.textView.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
@@ -103,5 +105,15 @@ class ToDoItemAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
             Collections.sort(_todoItemArrayList.itemsList, new ToDoItemsCompartor());
             notifyDataSetChanged();
         });
+
+        holder.textView.setOnClickListener(v -> {
+
+            Intent resultsIntent = new Intent(v.getContext(), EditToDoItem.class);
+            resultsIntent.putExtra("toDoItem",item.serializable());
+            _todoItemArrayList.deleteItem(item);
+            v.getContext().startActivity(resultsIntent);
+        });
+
     }
+
 }

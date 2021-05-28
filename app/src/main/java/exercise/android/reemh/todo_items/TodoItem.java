@@ -60,6 +60,10 @@ public class TodoItem implements Serializable {
         description = text;
     }
 
+    public String getDescription(){
+        return this.description;
+    }
+
     public LocalDateTime getlastModifiedTime() {
         return this.lastModified;
     }

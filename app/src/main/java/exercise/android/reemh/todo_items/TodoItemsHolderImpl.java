@@ -60,7 +60,16 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
         return new ArrayList<>(itemsList);
     }
 
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void addItem(TodoItem item)
+    {
+        itemsList.add(item);
+        Collections.sort(itemsList, new ToDoItemsCompartor());
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(item.getId(), item.serializable());
+        editor.apply();
+        toDoItemsLiveDataMutable.setValue(new ArrayList<TodoItem>(itemsList));
+    }
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void addNewInProgressItem(String description) {
