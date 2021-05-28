@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.bytebuddy.TypeCache;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,6 +30,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     // ToDo 1: generate ids using UUID
     // todo 2: add a real timeStamp, that ToDoItemsHolder will hold, instead of ToDOItem itself??
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public TodoItemsHolderImpl(Context context) {
         this.context = context;
         this.sp = context.getSharedPreferences("local_db", Context.MODE_PRIVATE);
@@ -37,6 +39,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     /*
 
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void initializeFromSp() {
         Set<String> toDoItems = sp.getAll().keySet();
         for (String key : toDoItems) {
@@ -58,10 +61,12 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void addNewInProgressItem(String description) {
         String id = UUID.randomUUID().toString();
-        TodoItem newTodoItem = new TodoItem(INPROGRESS, description); //todo: add id and time stamp!
+        LocalDateTime createdTime = LocalDateTime.now();
+        TodoItem newTodoItem = new TodoItem(INPROGRESS, description, createdTime, createdTime, id); //todo: add id and time stamp!
         itemsList.add(newTodoItem);
         Collections.sort(itemsList, new ToDoItemsCompartor());
         SharedPreferences.Editor editor = sp.edit();
@@ -71,8 +76,11 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void markItemDone(TodoItem item) {
+        LocalDateTime lastModifiedTime = LocalDateTime.now();
+        item.setLastModified(lastModifiedTime);
         item.setStatus(DONE);
         Collections.sort(itemsList, new ToDoItemsCompartor());
         SharedPreferences.Editor editor = sp.edit();
@@ -82,8 +90,11 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void markItemInProgress(TodoItem item) {
+        LocalDateTime lastModifiedTime = LocalDateTime.now();
+        item.setLastModified(lastModifiedTime);
         item.setStatus(INPROGRESS);
         Collections.sort(itemsList, new ToDoItemsCompartor());
         SharedPreferences.Editor editor = sp.edit();
@@ -93,6 +104,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void deleteItem(TodoItem item) {
         itemsList.remove(item);
@@ -104,6 +116,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void clear() {
         SharedPreferences.Editor editor = sp.edit();
@@ -116,6 +129,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void addAll(List<TodoItem> items) {
         itemsList.addAll(items);

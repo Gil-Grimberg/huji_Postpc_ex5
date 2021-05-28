@@ -49,6 +49,7 @@ class ToDoItemAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
         _todoItemArrayList = holder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void setToDoItems(List<TodoItem> items) {
         if (!_todoItemArrayList.getCurrentItems().isEmpty())
             _todoItemArrayList.clear();
@@ -70,6 +71,7 @@ class ToDoItemAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void onBindViewHolder(ToDoViewHolder holder, int position) {
         if (position%2==0)
             holder.constraintLayout.setBackgroundColor(Color.parseColor("#CCCCCC"));

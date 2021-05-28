@@ -19,6 +19,5 @@ public class ToDoItemsApp extends Application {
         super.onCreate();
         instance = this;
         dataBase = new TodoItemsHolderImpl(this);
-
     }
 }

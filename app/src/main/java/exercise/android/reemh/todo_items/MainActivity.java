@@ -1,11 +1,14 @@
 package exercise.android.reemh.todo_items;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     final int INPROGRESS = 2;
     public TodoItemsHolderImpl holder = null;
     ToDoItemAdapter adapter;
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,47 +38,60 @@ public class MainActivity extends AppCompatActivity {
 //            holder = new TodoItemsHolderImpl();
             holder = ToDoItemsApp.getInstance().getDataBase(); // replace the last row with this??
         }
+
+        adapter = new ToDoItemAdapter((TodoItemsHolderImpl)holder);
+        adapter.setToDoItems(holder.getCurrentItems());
+        RecyclerView recyclerTodoItemsList = findViewById(R.id.recyclerTodoItemsList);
+        recyclerTodoItemsList.setAdapter(adapter);
+        recyclerTodoItemsList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+
+        EditText taskText = findViewById(R.id.editTextInsertTask);
+        FloatingActionButton addButton = findViewById(R.id.buttonCreateTodoItem);
+        EditText finalTaskText = taskText;
+        addButton.setOnClickListener(v -> {
+            if (!finalTaskText.getText().toString().equals("")) {
+                // add a new task
+                holder.addNewInProgressItem(finalTaskText.getText().toString());
+                adapter.setToDoItems(holder.getCurrentItems());
+                finalTaskText.setText("");
+            }
+        });
+        finalTaskText.setOnClickListener(v-> {
+            Intent resultsIntent = new Intent(MainActivity.this, ResultsActivity.class);
+            resultsIntent.putExtra("original_number", original_number);
+            resultsIntent.putExtra("root1", root1);
+            resultsIntent.putExtra("root2", root2);
+            startActivity(resultsIntent);
+        });
+
+
         holder.toDoItemsLiveDataPublic.observe(this, new Observer<ArrayList<TodoItem>>() {
             @Override
-            public void onChanged(ArrayList<TodoItem> todoItems) {
+            public void onChanged(ArrayList<TodoItem> todoItemsList) {
                 // todo: do all changes necessary to activity
-                adapter = new ToDoItemAdapter((TodoItemsHolderImpl) holder);
-                adapter.setToDoItems(holder.getCurrentItems());
-                RecyclerView recyclerTodoItemsList = findViewById(R.id.recyclerTodoItemsList);
-                recyclerTodoItemsList.setAdapter(adapter);
-                recyclerTodoItemsList.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false)); //todo: make sure getApplicationContext is the same as MainActivity context
+                int i = 1;
+//                adapter.setToDoItems(todoItemsList);
+//                holder.clear();
+//                holder.addAll(todoItemsList);
             }
         });
         if (savedInstanceState != null) {
-            EditText taskText = findViewById(R.id.editTextInsertTask);
+            taskText = findViewById(R.id.editTextInsertTask);
             taskText.setText(savedInstanceState.getString("taskText"));
-            holder.clear();
-            List<TodoItem> savedItemsList = holder.getCurrentItems();
-            int size = savedInstanceState.getInt("size");
-            for (int i = 0; i < size; i++) {
-                savedItemsList.add((TodoItem) savedInstanceState.getSerializable("task_" + String.valueOf(i)));
-            }
-            holder.addAll(savedItemsList);
         }
+//        if (savedInstanceState != null) {
+//            EditText taskText = findViewById(R.id.editTextInsertTask);
+//            taskText.setText(savedInstanceState.getString("taskText"));
+//            holder.clear();
+//            List<TodoItem> savedItemsList = holder.getCurrentItems();
+//            int size = savedInstanceState.getInt("size");
+//            for (int i = 0; i < size; i++) {
+//                savedItemsList.add((TodoItem) savedInstanceState.getSerializable("task_" + String.valueOf(i)));
+//            }
+//            holder.addAll(savedItemsList);
+//        }
 
-//        ToDoItemAdapter adapter = new ToDoItemAdapter((TodoItemsHolderImpl)holder);
-//        adapter.setToDoItems(holder.getCurrentItems());
-//        RecyclerView recyclerTodoItemsList = findViewById(R.id.recyclerTodoItemsList);
-//        recyclerTodoItemsList.setAdapter(adapter);
-//        recyclerTodoItemsList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-//
-//        EditText taskText = findViewById(R.id.editTextInsertTask);
-//        FloatingActionButton addButton = findViewById(R.id.buttonCreateTodoItem);
-        EditText taskText = findViewById(R.id.editTextInsertTask);
-        FloatingActionButton addButton = findViewById(R.id.buttonCreateTodoItem);
-        addButton.setOnClickListener(v -> {
-            if (!taskText.getText().toString().equals("")) {
-                // add a new task
-                holder.addNewInProgressItem(taskText.getText().toString());
-                adapter.setToDoItems(holder.getCurrentItems());
-                taskText.setText("");
-            }
-        });
+
 
     }
 
