@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import net.bytebuddy.TypeCache;
 
@@ -22,7 +24,8 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     ArrayList<TodoItem> itemsList = new ArrayList<>();
     private final Context context;
     private SharedPreferences sp;
-
+    private final MutableLiveData<ArrayList<TodoItem>> toDoItemsLiveDataMutable = new MutableLiveData<>();
+    public final LiveData<ArrayList<TodoItem>> toDoItemsLiveDataPublic = toDoItemsLiveDataMutable;
     // ToDo 1: generate ids using UUID
     // todo 2: add a real timeStamp, that ToDoItemsHolder will hold, instead of ToDOItem itself??
 
@@ -45,6 +48,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
 
         }
         Collections.sort(itemsList, new ToDoItemsCompartor());
+        toDoItemsLiveDataMutable.setValue(new ArrayList<TodoItem>(itemsList));
     }
 
     @Override
@@ -63,6 +67,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(newTodoItem.getId(), newTodoItem.serializable());
         editor.apply();
+        toDoItemsLiveDataMutable.setValue(new ArrayList<TodoItem>(itemsList));
     }
 
 
@@ -73,6 +78,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(item.getId(), item.serializable());
         editor.apply();
+        toDoItemsLiveDataMutable.setValue(new ArrayList<TodoItem>(itemsList));
     }
 
 
@@ -83,6 +89,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(item.getId(), item.serializable());
         editor.apply();
+        toDoItemsLiveDataMutable.setValue(new ArrayList<TodoItem>(itemsList));
     }
 
 
@@ -93,6 +100,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(item.getId());
         editor.apply();
+        toDoItemsLiveDataMutable.setValue(new ArrayList<TodoItem>(itemsList));
 
     }
 
@@ -104,6 +112,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
         }
         editor.apply();
         itemsList.clear();
+        toDoItemsLiveDataMutable.setValue(new ArrayList<TodoItem>(itemsList));
     }
 
 
@@ -116,6 +125,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
             editor.putString(itemsList.get(i).getId(), itemsList.get(i).serializable());
         }
         editor.apply();
+        toDoItemsLiveDataMutable.setValue(new ArrayList<TodoItem>(itemsList));
     }
 
     @Override

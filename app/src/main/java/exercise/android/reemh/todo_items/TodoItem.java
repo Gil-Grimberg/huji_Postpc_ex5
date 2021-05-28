@@ -9,13 +9,13 @@ import java.util.List;
 
 public class TodoItem implements Serializable {
 
-    String id;
     final int DONE = 1;
     final int INPROGRESS = 2;
     static int timeStamp = 1; // todo: probably unnecessary
     int status;
     String description;
     int myTimeStamp;
+    String id;
 
     public TodoItem() {
         status = INPROGRESS;
@@ -31,12 +31,12 @@ public class TodoItem implements Serializable {
         timeStamp++;
     }
 
-    public TodoItem(int stat, String text, int timeStamp // todo 1: add String id to signature) {
+    public TodoItem(int stat, String text, int timeStamp, String id) {
         // todo 2: save the timeStamp as real time stamp!
         status = stat;
         description = text;
         myTimeStamp = timeStamp;
-        id = id;
+        this.id = id;
     }
 
     public void setStatus(int stat) {
@@ -54,6 +54,7 @@ public class TodoItem implements Serializable {
     public int getTimeStamp() {
         return myTimeStamp;
     }
+    public String getId(){return this.id;}
 
     public String serializable() {
         return String.valueOf(status) + "#" + description + "#" + String.valueOf(myTimeStamp) + "#" + id;
@@ -69,7 +70,7 @@ public class TodoItem implements Serializable {
             String description = split[1];
             int myTimeStamp = Integer.parseInt(split[2]);
             String id = split[3];
-            return new TodoItem(status, description, myTimeStamp,// todo: add id!);
+            return new TodoItem(status, description, myTimeStamp,id);
         } catch (Exception e) {
             System.out.println("exception: input " + item + "output: " + e.getMessage());
             return null;

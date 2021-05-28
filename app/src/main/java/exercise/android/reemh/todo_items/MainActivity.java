@@ -2,6 +2,7 @@ package exercise.android.reemh.todo_items;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,9 +22,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     final int DONE = 1;
-    final int INPROGRESS=2;
-    public TodoItemsHolder holder = null;
-
+    final int INPROGRESS = 2;
+    public TodoItemsHolderImpl holder = null;
+    ToDoItemAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,32 +34,41 @@ public class MainActivity extends AppCompatActivity {
 //            holder = new TodoItemsHolderImpl();
             holder = ToDoItemsApp.getInstance().getDataBase(); // replace the last row with this??
         }
-        if (savedInstanceState!=null)
-        {
+        holder.toDoItemsLiveDataPublic.observe(this, new Observer<ArrayList<TodoItem>>() {
+            @Override
+            public void onChanged(ArrayList<TodoItem> todoItems) {
+                // todo: do all changes necessary to activity
+                adapter = new ToDoItemAdapter((TodoItemsHolderImpl) holder);
+                adapter.setToDoItems(holder.getCurrentItems());
+                RecyclerView recyclerTodoItemsList = findViewById(R.id.recyclerTodoItemsList);
+                recyclerTodoItemsList.setAdapter(adapter);
+                recyclerTodoItemsList.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false)); //todo: make sure getApplicationContext is the same as MainActivity context
+            }
+        });
+        if (savedInstanceState != null) {
             EditText taskText = findViewById(R.id.editTextInsertTask);
             taskText.setText(savedInstanceState.getString("taskText"));
             holder.clear();
             List<TodoItem> savedItemsList = holder.getCurrentItems();
             int size = savedInstanceState.getInt("size");
-            for (int i=0;i<size;i++)
-            {
-                savedItemsList.add((TodoItem) savedInstanceState.getSerializable("task_"+String.valueOf(i)));
+            for (int i = 0; i < size; i++) {
+                savedItemsList.add((TodoItem) savedInstanceState.getSerializable("task_" + String.valueOf(i)));
             }
             holder.addAll(savedItemsList);
         }
 
-        ToDoItemAdapter adapter = new ToDoItemAdapter((TodoItemsHolderImpl)holder);
-        adapter.setToDoItems(holder.getCurrentItems());
-        RecyclerView recyclerTodoItemsList = findViewById(R.id.recyclerTodoItemsList);
-        recyclerTodoItemsList.setAdapter(adapter);
-        recyclerTodoItemsList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-
+//        ToDoItemAdapter adapter = new ToDoItemAdapter((TodoItemsHolderImpl)holder);
+//        adapter.setToDoItems(holder.getCurrentItems());
+//        RecyclerView recyclerTodoItemsList = findViewById(R.id.recyclerTodoItemsList);
+//        recyclerTodoItemsList.setAdapter(adapter);
+//        recyclerTodoItemsList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+//
+//        EditText taskText = findViewById(R.id.editTextInsertTask);
+//        FloatingActionButton addButton = findViewById(R.id.buttonCreateTodoItem);
         EditText taskText = findViewById(R.id.editTextInsertTask);
         FloatingActionButton addButton = findViewById(R.id.buttonCreateTodoItem);
-
-        addButton.setOnClickListener(v->{
-            if (!taskText.getText().toString().equals(""))
-            {
+        addButton.setOnClickListener(v -> {
+            if (!taskText.getText().toString().equals("")) {
                 // add a new task
                 holder.addNewInProgressItem(taskText.getText().toString());
                 adapter.setToDoItems(holder.getCurrentItems());
@@ -67,18 +77,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         EditText taskText = findViewById(R.id.editTextInsertTask);
-        outState.putString("taskText",taskText.getText().toString());
+        outState.putString("taskText", taskText.getText().toString());
         List<TodoItem> savedItemsList;
         savedItemsList = holder.getCurrentItems();
         int size = holder.size();
-        outState.putInt("size",size);
-        for (int i=0;i<size;i++)
-        {
-            outState.putSerializable("task_"+String.valueOf(i),savedItemsList.get(i));
+        outState.putInt("size", size);
+        for (int i = 0; i < size; i++) {
+            outState.putSerializable("task_" + String.valueOf(i), savedItemsList.get(i));
         }
 
     }
