@@ -43,6 +43,7 @@ public class EditToDoItem extends AppCompatActivity {
         Intent intentOpenedMe = getIntent();
         String itemAsString = intentOpenedMe.getStringExtra("toDoItem");
         TodoItem item = TodoItem.string_to_Item(itemAsString);
+        database.addItem(item);
         createdTime.setText("Time Of Creation: " + item.getCreatedTime().toString());
         callLastModified(item,lastModified);
         editTask.setText(item.getDescription());
