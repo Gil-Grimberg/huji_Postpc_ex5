@@ -6,7 +6,7 @@ public class ToDoItemsApp extends Application {
 
     private TodoItemsHolderImpl dataBase;
 
-    public TodoItemsHolderImpl getDataBase(){
+    public TodoItemsHolder getDataBase(){
         return dataBase;
     }
     public static ToDoItemsApp instance = null;

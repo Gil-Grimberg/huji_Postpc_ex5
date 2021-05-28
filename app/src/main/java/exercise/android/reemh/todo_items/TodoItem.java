@@ -8,10 +8,11 @@ import java.util.List;
 
 
 public class TodoItem implements Serializable {
-    // TODO: edit this class as you want
+
+    String id;
     final int DONE = 1;
     final int INPROGRESS = 2;
-    static int timeStamp = 1;
+    static int timeStamp = 1; // todo: probably unnecessary
     int status;
     String description;
     int myTimeStamp;
@@ -30,10 +31,12 @@ public class TodoItem implements Serializable {
         timeStamp++;
     }
 
-    public TodoItem(int stat, String text, int timeStamp) {
+    public TodoItem(int stat, String text, int timeStamp // todo 1: add String id to signature) {
+        // todo 2: save the timeStamp as real time stamp!
         status = stat;
         description = text;
         myTimeStamp = timeStamp;
+        id = id;
     }
 
     public void setStatus(int stat) {
@@ -53,18 +56,22 @@ public class TodoItem implements Serializable {
     }
 
     public String serializable() {
-        return String.valueOf(status) + "$" + description + "$" + String.valueOf(myTimeStamp);
+        return String.valueOf(status) + "#" + description + "#" + String.valueOf(myTimeStamp) + "#" + id;
     }
 
-    public TodoItem string_to_Item(String item) {
+    public static TodoItem string_to_Item(String item) {
+        if (item == null) {
+            return null;
+        }
         try {
-            String[] split = item.split("$");
+            String[] split = item.split("#");
             int status = Integer.parseInt(split[0]);
             String description = split[1];
             int myTimeStamp = Integer.parseInt(split[2]);
-            return new TodoItem(status, description, myTimeStamp);
+            String id = split[3];
+            return new TodoItem(status, description, myTimeStamp,// todo: add id!);
         } catch (Exception e) {
-            System.out.println("exception: input " + item + "output: "+ e.getMessage());
+            System.out.println("exception: input " + item + "output: " + e.getMessage());
             return null;
         }
     }
