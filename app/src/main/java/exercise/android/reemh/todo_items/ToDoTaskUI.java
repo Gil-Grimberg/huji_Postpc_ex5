@@ -90,19 +90,19 @@ class ToDoItemAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
             if (holder.checkBox.isChecked()) {
 //                holder.textView.setPaintFlags(holder.textView.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
                 _todoItemArrayList.markItemDone(_todoItemArrayList.itemsList.get(position)); // make sure the real list is updated!
-                Collections.sort(_todoItemArrayList.itemsList, new ToDoItemsCompartor());
+//                Collections.sort(_todoItemArrayList.itemsList, new ToDoItemsCompartor());
 
             }
             else {
 //                holder.textView.setPaintFlags(holder.textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                 _todoItemArrayList.markItemInProgress(_todoItemArrayList.itemsList.get(position));
-                Collections.sort(_todoItemArrayList.itemsList, new ToDoItemsCompartor());
+//                Collections.sort(_todoItemArrayList.itemsList, new ToDoItemsCompartor());
             }
             notifyDataSetChanged();
         });
         holder.deleteButton.setOnClickListener(v->{
             _todoItemArrayList.deleteItem(item);
-            Collections.sort(_todoItemArrayList.itemsList, new ToDoItemsCompartor());
+//            Collections.sort(_todoItemArrayList.itemsList, new ToDoItemsCompartor());
             notifyDataSetChanged();
         });
 

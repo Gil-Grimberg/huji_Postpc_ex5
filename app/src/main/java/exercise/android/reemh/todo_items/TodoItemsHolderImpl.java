@@ -116,6 +116,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void deleteItem(TodoItem item) {
+        if (item==null) return;
         itemsList.remove(item);
         Collections.sort(itemsList, new ToDoItemsCompartor());
         SharedPreferences.Editor editor = sp.edit();
@@ -134,13 +135,17 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
         }
         editor.apply();
         itemsList.clear();
-        toDoItemsLiveDataMutable.setValue(new ArrayList<TodoItem>(itemsList));
+//        toDoItemsLiveDataMutable.setValue(new ArrayList<TodoItem>(itemsList));
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void addAll(List<TodoItem> items) {
+        if (!itemsList.isEmpty())
+        {
+            itemsList.clear();
+        }
         itemsList.addAll(items);
         Collections.sort(itemsList, new ToDoItemsCompartor());
         SharedPreferences.Editor editor = sp.edit();
@@ -148,7 +153,7 @@ public class TodoItemsHolderImpl implements TodoItemsHolder {
             editor.putString(itemsList.get(i).getId(), itemsList.get(i).serializable());
         }
         editor.apply();
-        toDoItemsLiveDataMutable.setValue(new ArrayList<TodoItem>(itemsList));
+//        toDoItemsLiveDataMutable.setValue(new ArrayList<TodoItem>(itemsList));
     }
 
     @Override

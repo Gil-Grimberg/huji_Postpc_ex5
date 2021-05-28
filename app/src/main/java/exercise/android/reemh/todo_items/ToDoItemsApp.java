@@ -1,6 +1,9 @@
 package exercise.android.reemh.todo_items;
 
 import android.app.Application;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 public class ToDoItemsApp extends Application {
 
@@ -14,6 +17,7 @@ public class ToDoItemsApp extends Application {
     public static ToDoItemsApp getInstance(){
         return instance;
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate() {
         super.onCreate();

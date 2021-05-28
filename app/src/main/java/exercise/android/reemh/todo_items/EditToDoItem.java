@@ -18,6 +18,8 @@ import androidx.core.app.NotificationCompatSideChannelService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 public class EditToDoItem extends AppCompatActivity {
 
@@ -28,7 +30,7 @@ public class EditToDoItem extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_todo_item);
-        if (database==null) {
+        if (database == null) {
             database = ToDoItemsApp.getInstance().getDataBase();
         }
 
@@ -42,16 +44,13 @@ public class EditToDoItem extends AppCompatActivity {
         String itemAsString = intentOpenedMe.getStringExtra("toDoItem");
         TodoItem item = TodoItem.string_to_Item(itemAsString);
         createdTime.setText("Time Of Creation: " + item.getCreatedTime().toString());
-        // todo: do the lastModified conditions and setText
-
+        callLastModified(item,lastModified);
         editTask.setText(item.getDescription());
         checkBox.setChecked(item.isDone());
-        if (item.isDone())
-        {
+
+        if (item.isDone()) {
             checkBox.setText("Done");
-        }
-        else
-        {
+        } else {
             checkBox.setText("In Progress");
         }
         // todo:
@@ -67,33 +66,62 @@ public class EditToDoItem extends AppCompatActivity {
 
             public void afterTextChanged(Editable s) {
                 // text did change
-
+                database.deleteItem(item);
                 String newText = String.valueOf(editTask.getText());
                 item.setDescription(newText);
+                item.setLastModified(LocalDateTime.now());
+                database.addItem(item);
+                callLastModified(item,lastModified);
+
             }
         });
 
-        checkBox.setOnClickListener(v-> {
-            if (checkBox.isChecked())
-            {
+        checkBox.setOnClickListener(v -> {
+            if (checkBox.isChecked()) {
+                database.deleteItem(item);
                 checkBox.setText("Done");
                 item.setStatus(item.DONE);
+                item.setLastModified(LocalDateTime.now());
+                database.addItem(item);
+                callLastModified(item,lastModified);
 
-            }
-            else{
+
+            } else {
+                database.deleteItem(item);
                 checkBox.setText("In Progress");
                 item.setStatus(item.INPROGRESS);
+                item.setLastModified(LocalDateTime.now());
+                database.addItem(item);
+                callLastModified(item,lastModified);
+
             }
 
         });
 
 
         okButton.setOnClickListener(v -> {
-            database.addItem(item);
             Intent resultsIntent = new Intent(v.getContext(), MainActivity.class);
             v.getContext().startActivity(resultsIntent);
 
+//            finish();
+
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void callLastModified(TodoItem myItem, TextView lastModified) {
+        long minutes = ChronoUnit.MINUTES.between(myItem.getlastModifiedTime(), LocalDateTime.now());
+        long days = ChronoUnit.DAYS.between(myItem.getlastModifiedTime(), LocalDateTime.now());
+        if (minutes < 60) {
+            lastModified.setText("Last Modified: " + String.valueOf(minutes) + " Minutes ago");
+
+        } else if (days == 0) {
+            lastModified.setText("Last Modified: Today at " + String.valueOf(myItem.getlastModifiedTime().getHour()));
+
+        } else {
+            lastModified.setText("Last Modified: " + String.valueOf(myItem.getlastModifiedTime().toLocalDate()) + " at " + String.valueOf(myItem.getlastModifiedTime().getHour()));
+
+        }
     }
 
 }

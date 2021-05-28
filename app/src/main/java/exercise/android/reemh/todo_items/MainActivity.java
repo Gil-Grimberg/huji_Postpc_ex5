@@ -62,8 +62,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(ArrayList<TodoItem> todoItemsList) {
                 // todo: do all changes necessary to activity
-                int i = 1;
-//                adapter.setToDoItems(todoItemsList);
+
 //                holder.clear();
 //                holder.addAll(todoItemsList);
             }
